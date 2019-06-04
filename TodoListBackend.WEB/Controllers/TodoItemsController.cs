@@ -56,13 +56,12 @@ namespace TodoListBackend.WEB.Controllers
             try
             {
                 TodoItemDTO item = await _service.GetByIdAsync(id);
-
-                if (item == null)
-                {
-                    return NotFound();
-                }
-
+               
                 return Ok(item);
+            }
+            catch (NullReferenceException e)
+            {
+                return NotFound(e);
             }
             catch (Exception e)
             {
@@ -78,9 +77,9 @@ namespace TodoListBackend.WEB.Controllers
         {
             try
             {
-                await _service.CreateAsync(item);
+                TodoItemDTO newItem = await _service.CreateAsync(item);
 
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = item.Id }, item);
+                return CreatedAtAction(nameof(GetByIdAsync), new { id = newItem.Id }, newItem);
             }
             catch (Exception e)
             {
@@ -106,6 +105,14 @@ namespace TodoListBackend.WEB.Controllers
 
                 return NoContent();
             }
+            catch (ArgumentNullException e)
+            {
+                return NotFound(e);
+            }
+            catch (NullReferenceException e)
+            {
+                return NotFound(e);
+            }
             catch (Exception e)
             {
                 return BadRequest(e);
@@ -124,6 +131,10 @@ namespace TodoListBackend.WEB.Controllers
                 await _service.DeleteAsync(id);
 
                 return NoContent();
+            }
+            catch (ArgumentNullException e)
+            {
+                return NotFound(e);
             }
             catch (NullReferenceException e)
             {

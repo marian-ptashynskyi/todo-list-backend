@@ -53,7 +53,7 @@ namespace TodoListBackend.WEB
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
